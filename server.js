@@ -3,8 +3,10 @@ const express = require('express')
 
 const mysql=require('mysql2');
 const cors=require('cors');
+const uuid=require('uuid');
 const app = express()
 const port = 10000;
+
 
 
 app.use(cors());
@@ -89,8 +91,25 @@ db.connect(err => {
     })
 
    }) 
+
+
+
+
+   app.get(`/getGameId`, async (req, res) => {
+    let gameId;
+    let exists = true;
+    while (exists) {
+      gameId = getGameId();
+      const [rows] = await db.promise().query(`SELECT * FROM game_history WHERE game_id = ?`, [gameId]);
+      exists = rows.length > 0;
+    }
+    res.send({ message: gameId });
+  });
    
-  
+  function getGameId(){
+    return uuid.v4();
+  }
+
         
         
 
