@@ -62,7 +62,7 @@ db.connect(err => {
 
 app.get(`/getGameHistory`, (req, res) => {
 
-  db.query(`select * from game_history`, (err, result, field) => {
+  db.query(`SELECT * FROM game_history ORDER BY game_id, round`, (err, result, field) => {
 
     if (err) {
       res.send({ message: "Error Getting data" })
